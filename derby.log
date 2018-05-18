@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed May 16 22:44:31 BRT 2018:
+ Inicializando o Derby versão The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instância a816c00e-0163-6bc5-1f9f-000000bc3820
+no diretório de banco de dados C:\Users\vinic\Downloads\BibliotecaPessoal(Desafio)\BibliotecaPessoal\biblioteca 
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_161-b12
+user.dir=C:\Users\vinic\Downloads\BibliotecaPessoal(Desafio)\BibliotecaPessoal
+os.name=Windows 10
+os.arch=x86
+os.version=10.0
+derby.system.home=null
+Carregador de classe do banco de dados iniciado - derby.database.classpath=''

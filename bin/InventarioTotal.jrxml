@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Autores" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="52d42e78-211c-44ea-b49c-505b55ca0abe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString>
+		<![CDATA[select SUM(liv.preco)
+from livro liv ]]>
+	</queryString>
+	<field name="1" class="java.lang.Double"/>
+	<group name="Group2">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/5)]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<frame>
+				<reportElement uuid="b28af9fb-3271-4bdc-b94d-2e329699b935" mode="Opaque" x="0" y="0" width="451" height="95" forecolor="#666666" backcolor="#0066FF"/>
+				<staticText>
+					<reportElement uuid="0c8596d3-2311-43fb-ab31-a57a6ef213a0" style="Title" x="23" y="0" width="410" height="66"/>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<text><![CDATA[INVESTIMENTOS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="7a2904a3-7389-417d-aec8-a97c02d39786" style="SubTitle" x="93" y="66" width="283" height="29"/>
+					<textElement>
+						<font size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Informação dos investimentos]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement uuid="1508f125-27e1-4dcc-b106-5eedf952f409" mode="Opaque" x="0" y="100" width="451" height="32" forecolor="#FFCC00" backcolor="#999999"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement uuid="8fd076d7-2a9f-4912-af8f-8fe7417fe125" x="307" y="12" width="144" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<image>
+				<reportElement uuid="81122f86-8f7c-4785-979e-e2e3b8da04ed" x="464" y="6" width="102" height="106"/>
+				<imageExpression><![CDATA["biblioteca.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b2f32415-126c-4296-89df-7a368c6aeaa1" x="34" y="0" width="131" height="20" forecolor="#000000"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL GASTO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="28df03c7-14a4-4337-884d-e7c4936dfd42" x="41" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[1]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement uuid="7b8762cc-b0bb-4d33-91a8-3789c897aa3f" x="4" y="19" width="551" height="1"/>
+			</line>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="a85e5214-2430-4635-93a8-b15db10eba0e" x="41" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement uuid="2d47661a-b4ed-4b09-a854-b9aa1aec7c50" mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#CC0000" backcolor="#0066FF"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="75707fdf-0d08-49fd-bb73-9b99bdcabf6c" style="Column header" x="513" y="0" width="40" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="5c66b9f2-da49-4acc-b12b-0346ddfdbde7" style="Column header" x="433" y="0" width="80" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement uuid="d0ffaa75-4e64-4761-8175-faf2ba3d4661" style="Column header" x="2" y="1" width="197" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
