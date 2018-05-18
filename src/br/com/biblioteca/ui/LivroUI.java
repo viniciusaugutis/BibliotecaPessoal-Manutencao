@@ -1,6 +1,7 @@
 
 package br.com.biblioteca.ui;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,8 +21,10 @@ import javax.swing.JTable;
 import javax.swing.Timer;
 
 import br.com.biblioteca.dominio.LivroExcluido;
+import br.com.biblioteca.dominio.Editora;
 import br.com.biblioteca.dominio.Livro;
 import br.com.biblioteca.persistencia.AutorLivroDB;
+import br.com.biblioteca.persistencia.EditoraDB;
 import br.com.biblioteca.persistencia.EmprestimoDB;
 import br.com.biblioteca.persistencia.LivroExcluidoDB;
 import br.com.biblioteca.persistencia.LivroDB;
@@ -47,6 +50,7 @@ public class LivroUI extends JInternalFrame {
 	private List<Livro> lista;
 	JButton btnRemover = new JButton("");
 	JButton btnAlterar = new JButton("");
+	List<Editora> listaEditora = null;
 
 	// metodo construtor
 	public LivroUI() {
@@ -62,6 +66,18 @@ public class LivroUI extends JInternalFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		
+		listaEditora = new ArrayList();
+		EditoraDB editoraDB = new EditoraDB();
+		List<Editora> editoras = editoraDB.buscarTodas();
+		
+		Iterator<Editora> itEditora = editoras.iterator();
+		
+		Editora e;
+		while (itEditora.hasNext()) {
+			e = itEditora.next();
+			listaEditora.add(e);
+		}
 
 		btnRemover.setToolTipText("Remover");
 		btnRemover.setIcon(new ImageIcon(AutorUI.class.getResource("/icones/delete2.png")));
@@ -310,12 +326,19 @@ public class LivroUI extends JInternalFrame {
 			modelo.removeRow(0);
 		}
 
+		
 		while (it.hasNext()) {
 			a = it.next();
 
+			String nomeEditora = "";
+			for (Editora editora : listaEditora) {
+				if (editora.getId() == a.getEditora()) {
+					nomeEditora = editora.getNome();
+				}
+			}
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 			modelo.addRow(
-					new Object[] { a.getIsbn(), a.getTitulo(), a.getEditora(), formato.format(a.getDataCompra()) });
+					new Object[] { a.getIsbn(), a.getTitulo(), nomeEditora, formato.format(a.getDataCompra()) });
 		}
 	}
 

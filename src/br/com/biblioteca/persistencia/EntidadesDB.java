@@ -72,6 +72,34 @@ public class EntidadesDB {
 			con = Conexao.criarConexao();
 			DatabaseMetaData dbmd = con.getMetaData();
 
+			
+			rs = dbmd.getTables(null, null, "EDITORA", new String[] { "TABLE" });
+
+			if (!rs.next()) {
+
+				stm = con.createStatement();
+
+				// se não houver uma tabela, ela é criada
+				String QUERY = "CREATE TABLE editora (id int generated always as identity primary key,nome varchar(100) not null)";
+				stm.executeUpdate(QUERY);
+				
+				QUERY = "INSERT INTO editora VALUES (DEFAULT,'Ática'), (DEFAULT,'Novatec'), (DEFAULT,'Grupo A'), (DEFAULT,'Abril'), (DEFAULT,'Globo')";
+
+				try {
+					con = Conexao.criarConexao();
+					stm = con.createStatement();
+					// executa o comando para inserir os dados na tabela
+					stm.executeUpdate(QUERY);
+
+				} catch (SQLException e) {
+					System.out.println("Erro ao inserir na tabela");
+
+				} finally {
+					this.fecha(rs, stm, con);
+
+				}
+
+			}
 			// verifica se a tabela LIVRO já existe no BD
 			rs = dbmd.getTables(null, null, "LIVRO", new String[] { "TABLE" });
 
@@ -80,9 +108,10 @@ public class EntidadesDB {
 				stm = con.createStatement();
 
 				// se não houver uma tabela, ela é criada
-				String QUERY = "CREATE TABLE livro (isbn int generated always as identity primary key,titulo varchar(100) not null, anoedicao int, edicao int, editora varchar(100) not null, situacao char(1) not null, preco double not null, dataCompra Date not null)";
+				String QUERY = "CREATE TABLE livro (isbn int generated always as identity primary key,titulo varchar(100) not null, anoedicao int, edicao int, editora INT not null, situacao char(1) not null, preco double not null, dataCompra Date not null, CONSTRAINT idEditora FOREIGN KEY (editora) REFERENCES editora (id))";
 
 				stm.executeUpdate(QUERY);
+				System.out.println("criou");
 
 			}
 			// verifica se a tabela LIVROAUTOR já existe no BD
@@ -101,7 +130,7 @@ public class EntidadesDB {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("autor\n");
+			System.out.println(e);
 
 		} finally {
 

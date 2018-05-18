@@ -41,7 +41,7 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 		// cria um comando INSERT com os atributos de Livro
 
 		String QUERY = "INSERT INTO livro VALUES(DEFAULT," + "'" + livro.getTitulo() + "'," + livro.getAnoEdicao() + ", "
-				+ livro.getEdicao() + ", '" + livro.getEditora() + "', '" + livro.getSituacao() + "',"
+				+ livro.getEdicao() + ", " + livro.getEditora() + ", '" + livro.getSituacao() + "',"
 				+ livro.getPrecoLivro() + ",'" + dataBanco.format(livro.getDataCompra()) + "')";
 
 		try {
@@ -90,7 +90,7 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 		// cria um comando UPDATE usando os atributos de livro
 
 		String QUERY2 = "UPDATE livro set titulo = '" + livro.getTitulo() + "', anoedicao = " + livro.getAnoEdicao()
-				+ ", edicao = " + livro.getEdicao() + ", editora = '" + livro.getEditora() + "', situacao = '"
+				+ ", edicao = " + livro.getEdicao() + ", editora = " + livro.getEditora() + ", situacao = '"
 				+ livro.getSituacao() + "', preco = " + livro.getPrecoLivro() + ", dataCompra = '"
 				+ dataBanco.format(livro.getDataCompra()) + "' WHERE  isbn = " + livro.getIsbn();
 
@@ -140,7 +140,7 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 				String titulo = rs.getString("titulo");
 				int anoEdicao = rs.getInt("anoedicao");
 				int edicao = rs.getInt("edicao");
-				String editora = rs.getString("editora");
+				int editora = rs.getInt("editora");
 				char situacao = rs.getString("situacao").charAt(0);
 				double preco = rs.getDouble("preco");
 				Date dataCompra = rs.getDate("dataCompra");
@@ -187,7 +187,7 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 				String titulo = rs.getString("titulo");
 				int anoEdicao = rs.getInt("anoedicao");
 				int edicao = rs.getInt("edicao");
-				String editora = rs.getString("editora");
+				int editora = rs.getInt("editora");
 				char situacao = rs.getString("situacao").charAt(0);
 				double preco = rs.getDouble("preco");
 				Date dataCompra = rs.getDate("dataCompra");
@@ -256,7 +256,7 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 				String titulo = rs.getString("titulo");
 				int anoEdicao = rs.getInt("anoedicao");
 				int edicao = rs.getInt("edicao");
-				String editora = rs.getString("editora");
+				int editora = rs.getInt("editora");
 				char situacao = rs.getString("situacao").charAt(0);
 				double preco = rs.getDouble("preco");
 				Date dataCompra = rs.getDate("dataCompra");
@@ -305,8 +305,8 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 
 		// cria um SELECT para retornar um Livro pelo id
 		String QUERY = "SELECT * FROM livro WHERE  titulo = '" + livro.getTitulo() + "' and anoedicao = "
-				+ livro.getAnoEdicao() + " and edicao = " + livro.getEdicao() + " and editora = '" + livro.getEditora()
-				+ "'and situacao = '" + livro.getSituacao() + "'and preco = " + livro.getPrecoLivro()
+				+ livro.getAnoEdicao() + " and edicao = " + livro.getEdicao() + " and editora = " + livro.getEditora()
+				+ "and situacao = '" + livro.getSituacao() + "'and preco = " + livro.getPrecoLivro()
 				+ "and dataCompra = '" + dataBanco.format(livro.getDataCompra()) + "'";
 
 		try {
@@ -324,7 +324,7 @@ public class LivroDB implements GenericDB<Livro, Integer> {
 				String titulo = rs.getString("titulo");
 				int anoEdicao = rs.getInt("anoedicao");
 				int edicao = rs.getInt("edicao");
-				String editora = rs.getString("editora");
+				int editora = rs.getInt("editora");
 				char situacao = rs.getString("situacao").charAt(0);
 				double preco = rs.getDouble("preco");
 				Date dataCompra = rs.getDate("dataCompra");

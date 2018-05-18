@@ -9,7 +9,7 @@ public class Livro {
 	private String titulo;
 	private int anoEdicao;
 	private int edicao;
-	private String editora;
+	private int editora;
 	private char situacao;
 	private double precoLivro;
 	private Date dataCompra;
@@ -18,7 +18,7 @@ public class Livro {
 
 	}
 
-	public Livro(int isbn, String titulo, int anoEdicao, int edicao, String editora, char situacao, double preco,
+	public Livro(int isbn, String titulo, int anoEdicao, int edicao, int editora, char situacao, double preco,
 			Date dataCompra) {
 
 		this.isbn = isbn;
@@ -79,11 +79,11 @@ public class Livro {
 		this.edicao = edicao;
 	}
 
-	public String getEditora() {
+	public int getEditora() {
 		return editora;
 	}
 
-	public void setEditora(String editora) {
+	public void setEditora(int editora) {
 		this.editora = editora;
 	}
 

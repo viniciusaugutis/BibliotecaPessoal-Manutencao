@@ -14,9 +14,11 @@ import javax.swing.table.DefaultTableModel;
 
 import br.com.biblioteca.dominio.Autor;
 import br.com.biblioteca.dominio.AutorLivro;
+import br.com.biblioteca.dominio.Editora;
 import br.com.biblioteca.dominio.Livro;
 import br.com.biblioteca.persistencia.AutorDB;
 import br.com.biblioteca.persistencia.AutorLivroDB;
+import br.com.biblioteca.persistencia.EditoraDB;
 import br.com.biblioteca.persistencia.LivroDB;
 import utili.AplicaLookAndFeel;
 import utili.Limitador;
@@ -59,7 +61,6 @@ public class CadastroLivroUI extends JInternalFrame {
 
 	private JPanel PainelPrincipal;
 	private JTextField txTitulo;
-	private JTextField txEditora;
 	private DefaultTableModel modelo = new DefaultTableModel();
 	JSpinner spAnoEdicao = new JSpinner();
 	JSpinner spEdicao = new JSpinner();
@@ -69,6 +70,7 @@ public class CadastroLivroUI extends JInternalFrame {
 	private JFormattedTextField tfPreco = new JFormattedTextField();
 	private JXDatePicker txfData = new JXDatePicker();
 	private JComboBox cbxAutor = new JComboBox();
+	private JComboBox cbEditora = new JComboBox();
 	private JLabel lbTitulo = new JLabel("Titulo:*");
 	private int tipo; // tipo 0 = inserir, 1 = alterar
 	private Livro livro;
@@ -76,6 +78,7 @@ public class CadastroLivroUI extends JInternalFrame {
 	private JLabel lbPreco = new JLabel("Preco:*");
 	private JLabel lbData = new JLabel("Data Compra:*");
 	private JLabel lbAutor = new JLabel("Autor:*");
+	List<Editora> listaEditora = null;
 
 	public CadastroLivroUI(int tipo, Livro livro) {
 
@@ -99,7 +102,7 @@ public class CadastroLivroUI extends JInternalFrame {
 		tfPreco.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
 				new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
 
-		setBounds(100, 100, 630, 454);
+		setBounds(100, 100, 684, 454);
 		PainelPrincipal = new JPanel();
 		PainelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(PainelPrincipal);
@@ -144,7 +147,8 @@ public class CadastroLivroUI extends JInternalFrame {
 
 						Livro livroAcabadoDeCriar = new Livro(0, txTitulo.getText(),
 								Integer.parseInt(spAnoEdicao.getModel().getValue().toString()),
-								Integer.parseInt(spEdicao.getModel().getValue().toString()), txEditora.getText(),
+								Integer.parseInt(spEdicao.getModel().getValue().toString()), 
+								listaEditora.get(cbEditora.getSelectedIndex()-1).getId(),
 								(chbxSituacao.isSelected()) ? 'S' : 'N',
 								Double.parseDouble(tfPreco.getText().replace(',', '.')), txfData.getDate());
 
@@ -194,7 +198,8 @@ public class CadastroLivroUI extends JInternalFrame {
 								.setAnoEdicao(Integer.parseInt(spAnoEdicao.getModel().getValue().toString()));
 						CadastroLivroUI.this.livro
 								.setEdicao(Integer.parseInt(spEdicao.getModel().getValue().toString()));
-						CadastroLivroUI.this.livro.setEditora(txEditora.getText());
+						CadastroLivroUI.this.livro.setEditora(
+								listaEditora.get(cbEditora.getSelectedIndex()-1).getId());
 						CadastroLivroUI.this.livro.setSituacao(chbxSituacao.isSelected() ? 'S' : 'N');
 
 						livroDB.modificar(CadastroLivroUI.this.livro);
@@ -259,31 +264,32 @@ public class CadastroLivroUI extends JInternalFrame {
 		});
 		panel.setBorder(new TitledBorder(null, "Autores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GroupLayout gl_PainelPrincipal = new GroupLayout(PainelPrincipal);
-		gl_PainelPrincipal.setHorizontalGroup(gl_PainelPrincipal.createParallelGroup(Alignment.TRAILING)
+		gl_PainelPrincipal.setHorizontalGroup(
+			gl_PainelPrincipal.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_PainelPrincipal.createSequentialGroup()
-						.addGroup(gl_PainelPrincipal.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING,
-										gl_PainelPrincipal.createSequentialGroup().addContainerGap()
-												.addComponent(btnSalvar).addGap(18).addComponent(btnCancelar))
-						.addComponent(painelDados, GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addContainerGap(34, Short.MAX_VALUE)));
-		gl_PainelPrincipal
-				.setVerticalGroup(
-						gl_PainelPrincipal.createParallelGroup(Alignment.TRAILING)
-								.addGroup(
-										gl_PainelPrincipal.createSequentialGroup()
-												.addComponent(painelDados, GroupLayout.DEFAULT_SIZE, 202,
-														Short.MAX_VALUE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(panel, GroupLayout.PREFERRED_SIZE, 151,
-														GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_PainelPrincipal.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnCancelar, GroupLayout.PREFERRED_SIZE, 39,
-												GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap()));
+					.addGroup(gl_PainelPrincipal.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_PainelPrincipal.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnSalvar)
+							.addGap(18)
+							.addComponent(btnCancelar)
+							.addGap(26))
+						.addComponent(painelDados, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		gl_PainelPrincipal.setVerticalGroup(
+			gl_PainelPrincipal.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_PainelPrincipal.createSequentialGroup()
+					.addComponent(painelDados, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_PainelPrincipal.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnCancelar, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 
 		// Scroll da tabela de autores
 		JScrollPane scrollPane = new JScrollPane();
@@ -337,26 +343,33 @@ public class CadastroLivroUI extends JInternalFrame {
 
 		lbEditora.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
-		txEditora = new JTextField();
-		txEditora.setColumns(10);
-
 		JLabel lbEmprestado = new JLabel("Emprestado");
 		lbEmprestado.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
 		lbAutor.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
 		List<Autor> lista = new ArrayList();
-
 		AutorDB autorDB = new AutorDB();
 		List<Autor> autores = autorDB.buscarTodos();
-
+		
 		Iterator<Autor> it = autores.iterator();
-
+		
 		Autor a;
-
 		while (it.hasNext()) {
 			a = it.next();
 			lista.add(a);
+		}
+
+		listaEditora = new ArrayList();
+		EditoraDB editoraDB = new EditoraDB();
+		List<Editora> editoras = editoraDB.buscarTodas();
+		
+		Iterator<Editora> itEditora = editoras.iterator();
+		
+		Editora e;
+		while (itEditora.hasNext()) {
+			e = itEditora.next();
+			listaEditora.add(e);
 		}
 		
 		List<Autor> listaOriginal = new ArrayList<>();
@@ -371,6 +384,12 @@ public class CadastroLivroUI extends JInternalFrame {
 			cbxAutor.addItem(lista.get(j).getNome());
 		}
 
+		
+		cbEditora.addItem("<Selecione>");
+		for (int j = 0; j < listaEditora.size(); j++) {
+			cbEditora.addItem(listaEditora.get(j).getNome());
+		}
+		
 		JButton btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -474,94 +493,89 @@ public class CadastroLivroUI extends JInternalFrame {
 		lbData.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
 		GroupLayout gl_painelDados = new GroupLayout(painelDados);
-		gl_painelDados.setHorizontalGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_painelDados.createSequentialGroup().addContainerGap()
-						.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_painelDados.createSequentialGroup().addComponent(lbTitulo)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(txTitulo, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE))
+		gl_painelDados.setHorizontalGroup(
+			gl_painelDados.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_painelDados.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_painelDados.createSequentialGroup()
-								.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING, false)
-										.addGroup(gl_painelDados.createSequentialGroup()
-												.addComponent(chbxSituacao, GroupLayout.PREFERRED_SIZE, 21,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(lbEmprestado, GroupLayout.PREFERRED_SIZE, 82,
-														GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE).addComponent(lbPreco, GroupLayout.PREFERRED_SIZE, 43,
-														GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_painelDados.createSequentialGroup().addComponent(lbAnoEdicao)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(spAnoEdicao,
-												GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)))
-								.addGap(18)
-								.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_painelDados.createSequentialGroup()
-												.addComponent(lbEdicao, GroupLayout.PREFERRED_SIZE, 43,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(spEdicao,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-										.addComponent(tfPreco, GroupLayout.PREFERRED_SIZE, 69,
-												GroupLayout.PREFERRED_SIZE))
-								.addGap(13)
-								.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_painelDados.createSequentialGroup().addGap(7)
-												.addComponent(lbEditora, GroupLayout.PREFERRED_SIZE, 51,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(txEditora,
-														GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_painelDados.createSequentialGroup().addGap(10).addComponent(lbData)
-												.addGap(18).addComponent(txfData, GroupLayout.PREFERRED_SIZE, 140,
-														GroupLayout.PREFERRED_SIZE))))
-						.addGroup(
-								gl_painelDados.createSequentialGroup()
-										.addComponent(lbAutor, GroupLayout.PREFERRED_SIZE, 45,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(cbxAutor, GroupLayout.PREFERRED_SIZE, 289,
-												GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(btnAdicionar, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnExcluir, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)))
-				.addContainerGap()));
-		gl_painelDados.setVerticalGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_painelDados.createSequentialGroup().addContainerGap()
-						.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txTitulo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+							.addComponent(lbTitulo)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(txTitulo, GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
+						.addGroup(gl_painelDados.createSequentialGroup()
+							.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_painelDados.createSequentialGroup()
+									.addComponent(chbxSituacao, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lbEmprestado, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lbPreco, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_painelDados.createSequentialGroup()
+									.addComponent(lbAnoEdicao)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(spAnoEdicao, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)))
+							.addGap(18)
+							.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_painelDados.createSequentialGroup()
+									.addComponent(lbEdicao, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(spEdicao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(tfPreco, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
+							.addGap(13)
+							.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_painelDados.createSequentialGroup()
+									.addGap(7)
+									.addComponent(lbEditora, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(cbEditora, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_painelDados.createSequentialGroup()
+									.addGap(10)
+									.addComponent(lbData)
+									.addGap(18)
+									.addComponent(txfData, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)))
+							.addGap(33))
+						.addGroup(gl_painelDados.createSequentialGroup()
+							.addComponent(lbAutor, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(cbxAutor, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnAdicionar, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
+		gl_painelDados.setVerticalGroup(
+			gl_painelDados.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_painelDados.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txTitulo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbTitulo, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-				.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
+					.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+					.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lbAnoEdicao, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spAnoEdicao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(txEditora, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+						.addComponent(spAnoEdicao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbEditora, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbEdicao, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spEdicao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(
-						gl_painelDados.createParallelGroup(Alignment.LEADING)
-								.addComponent(chbxSituacao, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lbEmprestado, GroupLayout.PREFERRED_SIZE, 23,
-												GroupLayout.PREFERRED_SIZE)
-								.addComponent(lbPreco, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txfData, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfPreco, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lbData, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
-				.addGap(25)
-				.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
+						.addComponent(spEdicao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cbEditora, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_painelDados.createParallelGroup(Alignment.LEADING)
+						.addComponent(chbxSituacao, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lbEmprestado, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lbPreco, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txfData, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(tfPreco, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lbData, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
+					.addGap(25)
+					.addGroup(gl_painelDados.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lbAutor, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cbxAutor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnExcluir).addComponent(btnAdicionar)).addContainerGap()));
+						.addComponent(cbxAutor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAdicionar)
+						.addComponent(btnExcluir))
+					.addContainerGap())
+		);
 		painelDados.setLayout(gl_painelDados);
 		PainelPrincipal.setLayout(gl_PainelPrincipal);
 
@@ -573,11 +587,16 @@ public class CadastroLivroUI extends JInternalFrame {
 		}
 		// 20 caracteres
 		txTitulo.setDocument(new Limitador(100));
-		txEditora.setDocument(new Limitador(100));
 
 		if (this.tipo == 1) {
+			String nomeEditora = "";
+			for (Editora editora : listaEditora) {
+				if (editora.getId() == this.livro.getEditora()) {
+					nomeEditora = editora.getNome();
+				}
+			}
 			txTitulo.setText(this.livro.getTitulo());
-			txEditora.setText(this.livro.getEditora());
+			cbEditora.setSelectedItem(nomeEditora);;
 			spAnoEdicao.setValue(this.livro.getAnoEdicao());
 			spEdicao.setValue(this.livro.getEdicao());
 			chbxSituacao.setSelected(this.livro.getSituacao() == 'S' ? true : false);
@@ -622,7 +641,7 @@ public class CadastroLivroUI extends JInternalFrame {
 
 		}
 
-		if (txEditora.getText().equals("")) {
+		if (cbEditora.getSelectedIndex() == 0) {
 			opc = false;
 			txt += "\nEditora";
 			lbEditora.setForeground(Color.red);
@@ -688,5 +707,4 @@ public class CadastroLivroUI extends JInternalFrame {
 		timer.stop();
 
 	}
-
 }
