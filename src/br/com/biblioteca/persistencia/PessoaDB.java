@@ -133,7 +133,13 @@ public class PessoaDB implements GenericDB<Pessoa, Integer> {
 				String email = rs.getString("email");
 
 				// cria um Pessoa com os dados de um registro
-				Pessoa pessoa = new Pessoa(id, nome, telefone, email);
+				Pessoa pessoa = null;
+				try {
+					pessoa = new Pessoa(id, nome, telefone, email);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				// adiciona o Pessoa no ArrayList
 				lista.add(pessoa);
@@ -210,7 +216,12 @@ public class PessoaDB implements GenericDB<Pessoa, Integer> {
 				String telefone = rs.getString("telefone");
 				String email = rs.getString("email");
 
-				pessoa = new Pessoa(id, nome, telefone, email);
+				try {
+					pessoa = new Pessoa(id, nome, telefone, email);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		} catch (SQLException e) {

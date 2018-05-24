@@ -139,70 +139,85 @@ public class ConsultaEmprestimo extends JInternalFrame {
 				}
 			}
 		});
+		
+		JButton btnEmprestadosnoEmprestados = new JButton("Emprestados/N\u00E3o emprestados");
+		btnEmprestadosnoEmprestados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				EmprestimoDB emprestimodb = new EmprestimoDB();
+				try {
+					Relatorios.gerarRelatorio("relatorios\\emprestados.jasper", emprestimodb.getRelatorioEmprestados());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup().addGap(16)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_contentPane.createSequentialGroup()
-														.addComponent(lblNomeDoLivro, GroupLayout.PREFERRED_SIZE, 94,
-																GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(txfLivro, GroupLayout.PREFERRED_SIZE, 304,
-																GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnPesquisar,
-												GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup().addComponent(lbNome)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(txfNome, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGap(16)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addComponent(lblDataInicial, GroupLayout.PREFERRED_SIZE, 64,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(txfDataInicial, GroupLayout.PREFERRED_SIZE, 145,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(lblDataFinal, GroupLayout.PREFERRED_SIZE, 64,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(txfDataFinal, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+									.addComponent(lblNomeDoLivro, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txfLivro, GroupLayout.PREFERRED_SIZE, 304, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnPesquisar, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lbNome)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txfNome, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblDataInicial, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txfDataInicial, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(lblDataFinal, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txfDataFinal, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
 								.addComponent(btnVoltar, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(Alignment.TRAILING,
-								gl_contentPane.createSequentialGroup().addGap(14).addComponent(scrollPane,
-										GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)))
-						.addContainerGap())
-				.addGroup(Alignment.TRAILING,
-						gl_contentPane.createSequentialGroup().addContainerGap(208, Short.MAX_VALUE)
-								.addComponent(btnRelatorio, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-								.addGap(192)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup()
-				.addComponent(btnVoltar, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE).addGap(24)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGap(14)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(43)
+							.addComponent(btnRelatorio, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnEmprestadosnoEmprestados, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(btnVoltar, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+					.addGap(24)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNomeDoLivro, GroupLayout.PREFERRED_SIZE, 15,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(txfLivro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblNomeDoLivro, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txfLivro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnPesquisar, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txfNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txfNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbNome))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txfDataFinal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(txfDataInicial, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txfDataFinal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txfDataInicial, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblDataInicial, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblDataFinal, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE).addGap(18)
-				.addComponent(btnRelatorio).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnRelatorio)
+						.addComponent(btnEmprestadosnoEmprestados))
+					.addContainerGap(19, Short.MAX_VALUE))
+		);
 
 		String[] nomesColuna = { "Livro", "Pessoa", "Data Emprestimo" };
 

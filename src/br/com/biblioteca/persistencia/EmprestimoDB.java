@@ -321,5 +321,18 @@ public class EmprestimoDB implements GenericDB<Emprestimo, Integer> {
 
 		return rs;
 	}
+	
+	public ResultSet getRelatorioEmprestados() throws SQLException {
+
+		Connection con = Conexao.criarConexao();
+		String QUERY = "SELECT SUM(CASE WHEN emprestimo.data_Devolucao IS NULL THEN 1 ELSE 0 END) AS emprestados, SUM(CASE WHEN emprestimo.data_Devolucao IS NULL THEN 0 ELSE 1 END) AS naoEmprestados FROM emprestimo";
+
+
+		PreparedStatement stmt = con.prepareStatement(QUERY);
+
+		ResultSet rs = stmt.executeQuery();
+
+		return rs;
+	}
 
 }

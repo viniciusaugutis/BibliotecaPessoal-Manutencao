@@ -133,7 +133,12 @@ public class CadastroPessoaUI extends JInternalFrame {
 				if (CadastroPessoaUI.this.tipo == 0) {
 
 					if (verificaCampos() && (verificaEmail())) {
-						pessoadb.inserir(new Pessoa(txfNome.getText(), txfTelefone_1.getText(), txfEmail.getText()));
+						try {
+							pessoadb.inserir(new Pessoa(txfNome.getText(), txfTelefone_1.getText(), txfEmail.getText()));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 						PessoaUI pessoaUi = new PessoaUI();
 						BibliotecaPessoal b = BibliotecaPessoal.frame;
@@ -150,7 +155,12 @@ public class CadastroPessoaUI extends JInternalFrame {
 
 						CadastroPessoaUI.this.pessoa.setNome(txfNome.getText());
 
-						CadastroPessoaUI.this.pessoa.setTelefone(txfTelefone_1.getText());
+						try {
+							CadastroPessoaUI.this.pessoa.setTelefone(txfTelefone_1.getText());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						CadastroPessoaUI.this.pessoa.setEmail(txfEmail.getText());
 
 						pessoadb.modificar(CadastroPessoaUI.this.pessoa);
@@ -261,7 +271,7 @@ public class CadastroPessoaUI extends JInternalFrame {
 
 		}
 
-		if (txfTelefone_1.getText().equals("(  )      -     ")) {
+		if (txfTelefone_1.getText().equals("(  )      -     ") || (txfTelefone_1.getText().length()) != 17) {
 			opc = false;
 			txt += "\nTelefone";
 			lbTelefone.setForeground(Color.red);

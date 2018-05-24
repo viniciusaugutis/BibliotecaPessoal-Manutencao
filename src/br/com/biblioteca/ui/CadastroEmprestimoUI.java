@@ -142,6 +142,7 @@ public class CadastroEmprestimoUI extends JInternalFrame {
 		btnSalvar.setToolTipText("Salvar");
 
 		btnSalvar.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 
 				EmprestimoDB emprestimoDB = new EmprestimoDB();

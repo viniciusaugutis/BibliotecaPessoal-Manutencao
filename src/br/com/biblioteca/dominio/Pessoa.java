@@ -8,7 +8,7 @@ public class Pessoa {
 	String email;
 	
 	
-	public Pessoa(int id, String nome, String telefone, String email) {
+	public Pessoa(int id, String nome, String telefone, String email) throws Exception {
 
 		this.id = id;
 		this.setNome(nome);
@@ -18,7 +18,7 @@ public class Pessoa {
 
 	}
 
-	public Pessoa(String nome, String telefone, String email) {
+	public Pessoa(String nome, String telefone, String email) throws Exception {
 
 		this.setNome(nome);
 		
@@ -40,8 +40,13 @@ public class Pessoa {
 		return telefone;
 	}
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void setTelefone(String telefone) throws Exception {
+		if (telefone.length() == 17) {
+			this.telefone = telefone;
+		} else {
+			throw new Exception();
+		}
+		
 	}
 
 
