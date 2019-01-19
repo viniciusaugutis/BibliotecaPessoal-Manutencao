@@ -6,3 +6,5 @@ Essa aplicação tem como objetivo realizar a manutenção em um sistema desenvo
 
 ## Tecnologias
 Java 
+Derby DB
+JasperReports
